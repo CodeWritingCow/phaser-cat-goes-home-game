@@ -7,12 +7,20 @@ BasicGame.Game.prototype = {
 
   create: function () {
 
+    // Allow keyboard control
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    // Add background
     this.sea = this.add.tileSprite(0, 0, 800, 600, 'sea');
 
     this.player = this.add.sprite(this.game.width / 2, this.game.height - 50, 'cat');
     this.player.anchor.setTo(0.5, 0.5);
     this.player.animations.add('idle', [0, 1, 2], 5, true);
     this.player.play('idle');
+    this.physics.enable(this.player, Phaser.Physics.ARCADE);
+    this.player.speed = BasicGame.PLAYER_SPEED;
+    this.player.body.collideWorldBounds = true;
+    this.player.scale.setTo(1.5); // Scale player size by 1.5
 
     this.dog = this.add.sprite(50, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
@@ -59,6 +67,28 @@ BasicGame.Game.prototype = {
 
   update: function () {
     //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
+    
+    //  Set player initial velocity to zero
+    this.player.body.velocity.x = 0;
+    this.player.body.velocity.y = 0;
+
+    //  Set player movement control via keyboard
+    if (this.cursors.left.isDown) {
+      this.player.body.velocity.x = -this.player.speed;
+    } else if (this.cursors.right.isDown) {
+      this.player.body.velocity.x = this.player.speed;
+    }
+
+    if (this.cursors.up.isDown) {
+      this.player.body.velocity.y = -this.player.speed;
+    } else if (this.cursors.down.isDown) {
+      this.player.body.velocity.y = this.player.speed;
+    }
+
+    // Set player movement control via mouse/pointer
+    if (this.input.activePointer.isDown && this.physics.arcade.distanceToPointer(this.player) > 15) {
+      this.physics.arcade.moveToPointer(this.player, this.player.speed);
+    }
   },
 
   quitGame: function (pointer) {
