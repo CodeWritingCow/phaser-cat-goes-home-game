@@ -29,10 +29,17 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
     this.dog.scale.setTo(1.5);
-    this.dog.enableBody = true;
-    this.dog.physicsBodyType = Phaser.Physics.ARCADE;
-    this.dog.play('left');
 
+    // 'enableBody' is a property for Phaser group objects
+    // this.dog.enableBody = true;
+    
+    // Enable Game Objects physics body for dog
+    this.physics.enable(this.dog, Phaser.Physics.ARCADE);
+
+    // 'physicsBodyType' is a property for Phaser group objects
+    // this.dog.physicsBodyType = Phaser.Physics.ARCADE;
+    this.dog.play('left');
+/*
     this.dog = this.add.sprite(150, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
     this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
@@ -69,17 +76,26 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
     this.dog.scale.setTo(1.5);
     this.dog.play('right');    
-
+*/
   },
-/*
+
   checkCollisions: function() {
     this.physics.arcade.overlap(
-      this.player, this.dog, this.dog.kill(), null, this);
+      this.player, this.dog, this.dogHit, null, this);
   },
-*/
+
+  // Callback when cat and dog collide
+  dogHit: function(player, dog) {
+      //dog.destroy();
+      console.log('Collide!');
+  },
+
   update: function () {
     //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     
+    // Check collision
+    this.checkCollisions();
+
     //  Set player initial velocity to zero
     this.player.body.velocity.x = 0;
     this.player.body.velocity.y = 0;
@@ -102,8 +118,15 @@ BasicGame.Game.prototype = {
       this.physics.arcade.moveToPointer(this.player, this.player.speed);
     }
     
-    // Check collision
-    // this.checkCollisions();
+
+  },
+
+  render: function() {
+      // Show player sprite hitbox size
+      this.game.debug.body(this.player);
+
+      // Show dog sprite hitbox size
+      this.game.debug.body(this.dog);
   },
 
   quitGame: function (pointer) {
