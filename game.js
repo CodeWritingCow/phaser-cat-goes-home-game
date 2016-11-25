@@ -5,7 +5,18 @@ BasicGame.Game = function (game) {
 
 BasicGame.Game.prototype = {
 
-  create: function () {
+    // Preload game assets here during development.
+    // Remove this during deployment.
+    preload: function() {
+        //this.load.image('titlepage', 'assets/titlepage.png');
+        this.load.image('sea', 'assets/sea.png');
+        //this.load.spritesheet('player', 'assets/cats.png', 32, 32);
+        this.load.spritesheet('cat', 'assets/Hiura Flour - cats dogs.png', 32, 32);
+        //this.load.spritesheet('dog', 'assets/Hiura Flour - cats dogs.png', 32, 36);
+        this.load.spritesheet('dog', 'assets/Hiura Flour - cat and dog sprites.png', 32, 32);
+    },
+
+  create: function () { 
 
     // Allow keyboard control
     this.cursors = this.input.keyboard.createCursorKeys();

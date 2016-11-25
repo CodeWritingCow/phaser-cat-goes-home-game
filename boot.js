@@ -71,7 +71,14 @@ BasicGame.Boot.prototype = {
   preload: function () {
 
     //  Here we load the assets required for our preloader (in this case a loading bar)
-    this.load.image('preloaderBar', 'assets/preloader-bar.png');
+    // this.load.image('preloaderBar', 'assets/preloader-bar.png');
+    // 
+    this.load.image('titlepage', 'assets/titlepage.png');
+    this.load.image('sea', 'assets/sea.png');
+    //this.load.spritesheet('player', 'assets/cats.png', 32, 32);
+    this.load.spritesheet('cat', 'assets/Hiura Flour - cats dogs.png', 32, 32);
+    //this.load.spritesheet('dog', 'assets/Hiura Flour - cats dogs.png', 32, 36);
+    this.load.spritesheet('dog', 'assets/Hiura Flour - cat and dog sprites.png', 32, 32);    
 
   },
 
@@ -79,7 +86,11 @@ BasicGame.Boot.prototype = {
 
     //  By this point the preloader assets have loaded to the cache, we've set the game settings
     //  So now let's start the real preloader going
-    this.state.start('Preloader');
+
+    // During developement, skip 'Preloader' state and start immediately in 'Game' state.
+    // Save time by skipping main menu.
+    // this.state.start('Preloader');
+    this.state.start('Game');
 
   }
 
