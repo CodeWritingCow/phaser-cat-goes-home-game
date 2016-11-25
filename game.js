@@ -28,6 +28,9 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('left', [59, 60, 61, 62], 10, true);
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.dog.scale.setTo(1.5);
+    this.dog.enableBody = true;
+    this.dog.physicsBodyType = Phaser.Physics.ARCADE;
     this.dog.play('left');
 
     this.dog = this.add.sprite(150, 50, 'dog');
@@ -36,6 +39,7 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('left', [59, 60, 61, 62], 10, true);
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.dog.scale.setTo(1.5);
     this.dog.play('idle');
 
     this.dog = this.add.sprite(250, 50, 'dog');
@@ -44,6 +48,7 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('left', [59, 60, 61, 62], 5, true);
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.dog.scale.setTo(1.5);
     this.dog.play('down');
 
     this.dog = this.add.sprite(350, 50, 'dog');
@@ -53,6 +58,7 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('up', [83, 84, 85, 86], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.dog.scale.setTo(1.5);
     this.dog.play('up');
 
     this.dog = this.add.sprite(450, 50, 'dog');
@@ -61,10 +67,16 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('left', [59, 60, 61, 62], 5, true);
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.dog.scale.setTo(1.5);
     this.dog.play('right');    
 
   },
-
+/*
+  checkCollisions: function() {
+    this.physics.arcade.overlap(
+      this.player, this.dog, this.dog.kill(), null, this);
+  },
+*/
   update: function () {
     //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     
@@ -89,6 +101,9 @@ BasicGame.Game.prototype = {
     if (this.input.activePointer.isDown && this.physics.arcade.distanceToPointer(this.player) > 15) {
       this.physics.arcade.moveToPointer(this.player, this.player.speed);
     }
+    
+    // Check collision
+    // this.checkCollisions();
   },
 
   quitGame: function (pointer) {
