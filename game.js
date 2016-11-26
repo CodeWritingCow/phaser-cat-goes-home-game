@@ -113,7 +113,10 @@ BasicGame.Game.prototype = {
     this.physics.arcade.overlap(
       this.player, this.dog, this.dogHit, null, this);
 
-    this.physics.arcade.collide(this.player, this.idleDog);
+    // When cat and idleDog collide, dog woofs
+    this.physics.arcade.collide(this.player, this.idleDog, function() {
+        console.log('Woof!');
+    });
   },
 
   // Callback when cat and dog collide
