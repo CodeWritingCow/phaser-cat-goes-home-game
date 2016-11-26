@@ -10,9 +10,8 @@ BasicGame.Game.prototype = {
     preload: function() {
         //this.load.image('titlepage', 'assets/titlepage.png');
         this.load.image('sea', 'assets/sea.png');
-        //this.load.spritesheet('player', 'assets/cats.png', 32, 32);
+        this.load.spritesheet('player', 'assets/cats.png', 32, 32);
         this.load.spritesheet('cat', 'assets/Hiura Flour - cats dogs.png', 32, 32);
-        //this.load.spritesheet('dog', 'assets/Hiura Flour - cats dogs.png', 32, 36);
         this.load.spritesheet('dog', 'assets/Hiura Flour - cat and dog sprites.png', 32, 32);
     },
 
@@ -24,9 +23,24 @@ BasicGame.Game.prototype = {
     // Add background
     this.sea = this.add.tileSprite(0, 0, 800, 600, 'sea');
 
+/*  THIS USES spritesheet 'assets/Hiura Flour - cats dogs.png'
     this.player = this.add.sprite(this.game.width / 2, this.game.height - 50, 'cat');
     this.player.anchor.setTo(0.5, 0.5);
     this.player.animations.add('idle', [0, 1, 2], 5, true);
+    this.player.play('idle');
+    this.physics.enable(this.player, Phaser.Physics.ARCADE);
+    this.player.speed = BasicGame.PLAYER_SPEED;
+    this.player.body.collideWorldBounds = true;
+    this.player.scale.setTo(1.5); // Scale player size by 1.5
+*/
+    // THIS USES spritesheet 'assets/cats.png'
+    this.player = this.add.sprite(this.game.width / 2, this.game.height - 50, 'player');
+    this.player.anchor.setTo(0.5, 0.5);
+    this.player.animations.add('idle', [6, 7, 8, 6], 5, true);
+    this.player.animations.add('left', [18, 19, 20, 18], 5, true);
+    this.player.animations.add('right', [30, 31, 32, 30], 5, true);
+    this.player.animations.add('up', [42, 43, 44, 42], 5, true);
+    this.player.animations.add('down', [6, 7, 8, 6], 5, true);
     this.player.play('idle');
     this.physics.enable(this.player, Phaser.Physics.ARCADE);
     this.player.speed = BasicGame.PLAYER_SPEED;
@@ -102,8 +116,6 @@ BasicGame.Game.prototype = {
   },
 
   update: function () {
-    //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-    
     // Check collision
     this.checkCollisions();
 
@@ -114,14 +126,31 @@ BasicGame.Game.prototype = {
     //  Set player movement control via keyboard
     if (this.cursors.left.isDown) {
       this.player.body.velocity.x = -this.player.speed;
+      this.player.play('left');
     } else if (this.cursors.right.isDown) {
       this.player.body.velocity.x = this.player.speed;
+      this.player.play('right');
     }
 
     if (this.cursors.up.isDown) {
-      this.player.body.velocity.y = -this.player.speed;
+        if (this.cursors.left.isDown) {
+            this.player.play('left');
+        } else if (this.cursors.right.isDown) {
+            this.player.play('right');
+        } else {
+            this.player.play('up');
+        }
+        this.player.body.velocity.y = -this.player.speed;
+
     } else if (this.cursors.down.isDown) {
-      this.player.body.velocity.y = this.player.speed;
+        if (this.cursors.left.isDown) {
+            this.player.play('left');
+        } else if (this.cursors.right.isDown) {
+            this.player.play('right');
+        } else {
+            this.player.play('down');
+        }
+        this.player.body.velocity.y = this.player.speed;
     }
 
     // Set player movement control via mouse/pointer
@@ -133,11 +162,11 @@ BasicGame.Game.prototype = {
   },
 
   render: function() {
-      // Show player sprite hitbox size
+    /*  // Show player sprite hitbox size
       this.game.debug.body(this.player);
 
       // Show dog sprite hitbox size
-      this.game.debug.body(this.dog);
+      this.game.debug.body(this.dog);*/
   },
 
   quitGame: function (pointer) {
