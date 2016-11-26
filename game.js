@@ -10,6 +10,7 @@ BasicGame.Game.prototype = {
     preload: function() {
         //this.load.image('titlepage', 'assets/titlepage.png');
         this.load.image('sea', 'assets/sea.png');
+        this.load.image('grass', 'assets/grass.png');
         this.load.spritesheet('player', 'assets/cats.png', 32, 32);
         this.load.spritesheet('cat', 'assets/Hiura Flour - cats dogs.png', 32, 32);
         this.load.spritesheet('dog', 'assets/Hiura Flour - cat and dog sprites.png', 32, 32);
@@ -21,7 +22,7 @@ BasicGame.Game.prototype = {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     // Add background
-    this.sea = this.add.tileSprite(0, 0, 800, 600, 'sea');
+    this.grass = this.add.tileSprite(0, 0, 800, 600, 'grass');
 
 /*  THIS USES spritesheet 'assets/Hiura Flour - cats dogs.png'
     this.player = this.add.sprite(this.game.width / 2, this.game.height - 50, 'cat');
@@ -63,17 +64,21 @@ BasicGame.Game.prototype = {
 
     // 'physicsBodyType' is a property for Phaser group objects
     // this.dog.physicsBodyType = Phaser.Physics.ARCADE;
-    this.dog.play('left');
-/*
-    this.dog = this.add.sprite(150, 50, 'dog');
-    this.dog.anchor.setTo(0.5, 0.5);
-    this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.dog.animations.add('left', [59, 60, 61, 62], 10, true);
-    this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.dog.scale.setTo(1.5);
-    this.dog.play('idle');
+    this.dog.play('right');
 
+    this.idleDog = this.add.sprite(150, 50, 'dog');
+    this.idleDog.anchor.setTo(0.5, 0.5);
+    this.idleDog.animations.add('idle', [77, 78, 79, 80], 5, true);
+    this.idleDog.animations.add('left', [59, 60, 61, 62], 10, true);
+    this.idleDog.animations.add('right', [71, 72, 73, 74], 10, true);
+    this.idleDog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.idleDog.scale.setTo(1.5);
+    this.physics.enable(this.idleDog, Phaser.Physics.ARCADE);
+    this.idleDog.body.collideWorldBounds = true;
+    this.idleDog.body.immovable = true;
+    this.idleDog.play('idle');
+
+/*
     this.dog = this.add.sprite(250, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
     this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
@@ -107,6 +112,8 @@ BasicGame.Game.prototype = {
   checkCollisions: function() {
     this.physics.arcade.overlap(
       this.player, this.dog, this.dogHit, null, this);
+
+    this.physics.arcade.collide(this.player, this.idleDog);
   },
 
   // Callback when cat and dog collide
