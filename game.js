@@ -24,17 +24,6 @@ BasicGame.Game.prototype = {
     // Add background
     this.grass = this.add.tileSprite(0, 0, 800, 600, 'grass');
 
-/*  THIS USES spritesheet 'assets/Hiura Flour - cats dogs.png'
-    this.player = this.add.sprite(this.game.width / 2, this.game.height - 50, 'cat');
-    this.player.anchor.setTo(0.5, 0.5);
-    this.player.animations.add('idle', [0, 1, 2], 5, true);
-    this.player.play('idle');
-    this.physics.enable(this.player, Phaser.Physics.ARCADE);
-    this.player.speed = BasicGame.PLAYER_SPEED;
-    this.player.body.collideWorldBounds = true;
-    this.player.scale.setTo(1.5); // Scale player size by 1.5
-*/
-    // THIS USES spritesheet 'assets/cats.png'
     this.player = this.add.sprite(this.game.width / 2, this.game.height - 50, 'player');
     this.player.anchor.setTo(0.5, 0.5);
     this.player.animations.add('idle', [6, 7, 8, 6], 5, true);
@@ -53,6 +42,7 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
     this.dog.animations.add('left', [59, 60, 61, 62], 10, true);
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
+    this.dog.animations.add('up', [83, 84, 85, 86], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
     this.dog.scale.setTo(1.5);
 
@@ -71,6 +61,7 @@ BasicGame.Game.prototype = {
     this.idleDog.animations.add('idle', [77, 78, 79, 80], 5, true);
     this.idleDog.animations.add('left', [59, 60, 61, 62], 10, true);
     this.idleDog.animations.add('right', [71, 72, 73, 74], 10, true);
+    this.idleDog.animations.add('up', [83, 84, 85, 86], 10, true);
     this.idleDog.animations.add('down', [47, 48, 49, 50], 10, true);
     this.idleDog.scale.setTo(1.5);
     this.physics.enable(this.idleDog, Phaser.Physics.ARCADE);
@@ -78,16 +69,19 @@ BasicGame.Game.prototype = {
     this.idleDog.body.immovable = true;
     this.idleDog.play('idle');
 
-/*
-    this.dog = this.add.sprite(250, 50, 'dog');
-    this.dog.anchor.setTo(0.5, 0.5);
-    this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.dog.animations.add('left', [59, 60, 61, 62], 5, true);
-    this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.dog.scale.setTo(1.5);
-    this.dog.play('down');
+    this.runningDog = this.add.sprite(250, 50, 'dog');
+    this.runningDog.anchor.setTo(0.5, 0.5);
+    this.runningDog.animations.add('idle', [77, 78, 79, 80], 5, true);
+    this.runningDog.animations.add('left', [59, 60, 61, 62], 5, true);
+    this.runningDog.animations.add('right', [71, 72, 73, 74], 10, true);
+    this.runningDog.animations.add('up', [83, 84, 85, 86], 10, true);
+    this.runningDog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.runningDog.scale.setTo(1.5);
+    this.physics.enable(this.runningDog, Phaser.Physics.ARCADE);
+    this.runningDog.body.collideWorldBounds = true;
+    this.runningDog.play('down');
 
+/*
     this.dog = this.add.sprite(350, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
     this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
@@ -126,8 +120,10 @@ BasicGame.Game.prototype = {
   },
 
   update: function () {
-    // Check collision
     this.checkCollisions();
+
+    // runningDog chases player
+    this.physics.arcade.moveToObject(this.runningDog, this.player, 75);
 
     //  Set player initial velocity to zero
     this.player.body.velocity.x = 0;
