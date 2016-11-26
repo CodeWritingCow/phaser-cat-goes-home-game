@@ -156,8 +156,18 @@ BasicGame.Game.prototype = {
     // Set player movement control via mouse/pointer
     if (this.input.activePointer.isDown && this.physics.arcade.distanceToPointer(this.player) > 15) {
       this.physics.arcade.moveToPointer(this.player, this.player.speed);
+      if (this.player.body.velocity.x > 0) {
+        this.player.play('right');
+      } else if (this.player.body.velocity.x < 0) {
+        this.player.play('left');
+      } /* else if (this.player.body.velocity.x === 0) {
+        if (this.player.body.velocity.y > 0) {
+            this.player.play('down');
+        } else {
+            this.player.play('up');
+        }
+      } */
     }
-    
 
   },
 
