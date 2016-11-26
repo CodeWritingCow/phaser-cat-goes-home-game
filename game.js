@@ -35,7 +35,7 @@ BasicGame.Game.prototype = {
     this.physics.enable(this.player, Phaser.Physics.ARCADE);
     this.player.speed = BasicGame.PLAYER_SPEED;
     this.player.body.collideWorldBounds = true;
-    this.player.scale.setTo(1.5); // Scale player size by 1.5
+    this.player.scale.setTo(BasicGame.CHARACTER_SCALE); // Scale player size by 1.5
 
     this.dog = this.add.sprite(50, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
@@ -44,7 +44,7 @@ BasicGame.Game.prototype = {
     this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.dog.animations.add('up', [83, 84, 85, 86], 10, true);
     this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.dog.scale.setTo(1.5);
+    this.dog.scale.setTo(BasicGame.CHARACTER_SCALE);
 
     // 'enableBody' is a property for Phaser group objects
     // this.dog.enableBody = true;
@@ -63,7 +63,7 @@ BasicGame.Game.prototype = {
     this.idleDog.animations.add('right', [71, 72, 73, 74], 10, true);
     this.idleDog.animations.add('up', [83, 84, 85, 86], 10, true);
     this.idleDog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.idleDog.scale.setTo(1.5);
+    this.idleDog.scale.setTo(BasicGame.CHARACTER_SCALE);
     this.physics.enable(this.idleDog, Phaser.Physics.ARCADE);
     this.idleDog.body.collideWorldBounds = true;
     this.idleDog.body.immovable = true;
@@ -72,11 +72,11 @@ BasicGame.Game.prototype = {
     this.runningDog = this.add.sprite(250, 50, 'dog');
     this.runningDog.anchor.setTo(0.5, 0.5);
     this.runningDog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.runningDog.animations.add('left', [59, 60, 61, 62], 5, true);
-    this.runningDog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.runningDog.animations.add('up', [83, 84, 85, 86], 10, true);
-    this.runningDog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.runningDog.scale.setTo(1.5);
+    this.runningDog.animations.add('left', [60, 61, 62, 60], 5, true);
+    this.runningDog.animations.add('right', [72, 73, 74, 72], 10, true);
+    this.runningDog.animations.add('up', [84, 85, 86, 84], 10, true);
+    this.runningDog.animations.add('down', [48, 49, 50, 48], 10, true);
+    this.runningDog.scale.setTo(BasicGame.CHARACTER_SCALE);
     this.physics.enable(this.runningDog, Phaser.Physics.ARCADE);
     this.runningDog.body.collideWorldBounds = true;
     this.runningDog.play('down');
@@ -119,11 +119,49 @@ BasicGame.Game.prototype = {
       console.log('Collide!');
   },
 
+  // runningDog chases player
+  dogChaseCat: function() {
+    this.physics.arcade.moveToObject(this.runningDog, this.player, BasicGame.DOG_SPEED);
+
+    if (Math.round(this.runningDog.body.velocity.y) < 0 && Math.round(this.runningDog.body.velocity.x) === 0) {
+        this.runningDog.play('up');
+    }
+
+    if (Math.round(this.runningDog.body.velocity.y) > 0 && Math.round(this.runningDog.body.velocity.x) === 0) {
+        this.runningDog.play('down');
+    }
+
+    if (Math.round(this.runningDog.body.velocity.x) < 0) {
+        this.runningDog.play('left');
+    } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
+        this.runningDog.play('right');
+    }
+/*
+    if (Math.round(this.runningDog.body.velocity.y) < 0) {
+        if (Math.round(this.runningDog.body.velocity.x) < 0) {
+            this.runningDog.play('left');
+        } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
+            this.runningDog.play('right');
+        } else {
+            this.runningDog.play('up');
+        }
+    }
+    if (Math.round(this.runningDog.body.velocity.y) > 0) {
+        if (Math.round(this.runningDog.body.velocity.x) < 0) {
+            this.runningDog.play('left');
+        } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
+            this.runningDog.play('right');
+        } else {
+            this.runningDog.play('down');
+        }
+    }  
+*/
+  },
+
   update: function () {
     this.checkCollisions();
+    this.dogChaseCat();
 
-    // runningDog chases player
-    this.physics.arcade.moveToObject(this.runningDog, this.player, 75);
 
     //  Set player initial velocity to zero
     this.player.body.velocity.x = 0;
