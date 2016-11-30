@@ -39,11 +39,11 @@ BasicGame.Game.prototype = {
 
     this.dog = this.add.sprite(50, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
-    this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.dog.animations.add('left', [59, 60, 61, 62], 10, true);
-    this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.dog.animations.add('up', [83, 84, 85, 86], 10, true);
-    this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.dog.animations.add('idle', [78, 79, 80, 78], 5, true);
+    this.dog.animations.add('left', [60, 61, 62, 60], 10, true);
+    this.dog.animations.add('right', [72, 73, 74, 72], 10, true);
+    this.dog.animations.add('up', [84, 85, 86, 84], 10, true);
+    this.dog.animations.add('down', [48, 49, 50, 48], 10, true);
     this.dog.scale.setTo(BasicGame.CHARACTER_SCALE);
 
     // 'enableBody' is a property for Phaser group objects
@@ -58,20 +58,21 @@ BasicGame.Game.prototype = {
 
     this.idleDog = this.add.sprite(150, 50, 'dog');
     this.idleDog.anchor.setTo(0.5, 0.5);
-    this.idleDog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.idleDog.animations.add('left', [59, 60, 61, 62], 10, true);
-    this.idleDog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.idleDog.animations.add('up', [83, 84, 85, 86], 10, true);
-    this.idleDog.animations.add('down', [47, 48, 49, 50], 10, true);
+    this.idleDog.animations.add('idle', [78, 79, 80, 78], 5, true);
+    this.idleDog.animations.add('left', [60, 61, 62, 60], 10, true);
+    this.idleDog.animations.add('right', [72, 73, 74, 72], 10, true);
+    this.idleDog.animations.add('up', [84, 85, 86, 84], 10, true);
+    this.idleDog.animations.add('down', [48, 49, 50, 48], 10, true);
     this.idleDog.scale.setTo(BasicGame.CHARACTER_SCALE);
     this.physics.enable(this.idleDog, Phaser.Physics.ARCADE);
     this.idleDog.body.collideWorldBounds = true;
     this.idleDog.body.immovable = true;
     this.idleDog.play('idle');
 
+    // This dog chases player immediately
     this.runningDog = this.add.sprite(250, 50, 'dog');
     this.runningDog.anchor.setTo(0.5, 0.5);
-    this.runningDog.animations.add('idle', [77, 78, 79, 80], 5, true);
+    this.runningDog.animations.add('idle', [78, 79, 80, 78], 5, true);
     this.runningDog.animations.add('left', [60, 61, 62, 60], 5, true);
     this.runningDog.animations.add('right', [72, 73, 74, 72], 10, true);
     this.runningDog.animations.add('up', [84, 85, 86, 84], 10, true);
@@ -81,17 +82,20 @@ BasicGame.Game.prototype = {
     this.runningDog.body.collideWorldBounds = true;
     this.runningDog.play('down');
 
-/*
-    this.dog = this.add.sprite(350, 50, 'dog');
-    this.dog.anchor.setTo(0.5, 0.5);
-    this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.dog.animations.add('left', [59, 60, 61, 62], 5, true);
-    this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.dog.animations.add('up', [83, 84, 85, 86], 10, true);
-    this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.dog.scale.setTo(1.5);
-    this.dog.play('up');
+    // This dog waits 2 seconds after it appears, then chases player
+    this.waitTwoSecondDog = this.add.sprite(350, 50, 'dog');
+    this.waitTwoSecondDog.anchor.setTo(0.5, 0.5);
+    this.waitTwoSecondDog.animations.add('idle', [78, 79, 80, 78], 5, true);
+    this.waitTwoSecondDog.animations.add('left', [60, 61, 62, 60], 5, true);
+    this.waitTwoSecondDog.animations.add('right', [72, 73, 74, 72], 10, true);
+    this.waitTwoSecondDog.animations.add('up', [84, 85, 86, 84], 10, true);
+    this.waitTwoSecondDog.animations.add('down', [48, 49, 50, 48], 10, true);
+    this.waitTwoSecondDog.scale.setTo(BasicGame.CHARACTER_SCALE);
+    this.physics.enable(this.waitTwoSecondDog, Phaser.Physics.ARCADE);
+    this.waitTwoSecondDog.body.collideWorldBounds = true;
+    this.waitTwoSecondDog.play('idle');
 
+/*
     this.dog = this.add.sprite(450, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
     this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
@@ -158,9 +162,38 @@ BasicGame.Game.prototype = {
 */
   },
 
+  // waitTwoSecondDog chases cat after waiting 2 seconds in game
+  waitTwoSecondDogChaseCat: function() {
+    //this.physics.arcade.moveToObject(this.waitTwoSecondDog, this.player, this.rnd.integerInRange(20, 100));
+    this.physics.arcade.moveToObject(this.waitTwoSecondDog, this.player, BasicGame.PLAYER_SPEED);
+
+    if (Math.round(this.waitTwoSecondDog.body.velocity.y) < 0 && Math.round(this.waitTwoSecondDog.body.velocity.x) === 0) {
+        this.waitTwoSecondDog.play('up');
+    }
+
+    if (Math.round(this.waitTwoSecondDog.body.velocity.y) > 0 && Math.round(this.waitTwoSecondDog.body.velocity.x) === 0) {
+        this.waitTwoSecondDog.play('down');
+    }
+
+    if (Math.round(this.waitTwoSecondDog.body.velocity.x) < 0) {
+        this.waitTwoSecondDog.play('left');
+    } else if (Math.round(this.waitTwoSecondDog.body.velocity.x) > 0) {
+        this.waitTwoSecondDog.play('right');
+    }
+  },
+
+  // If 2 seconds pass in game, waitTwoSecondDog starts chasing cat
+  timeCheck: function() {
+      if (BasicGame.DOG_CHASE_DELAY < this.time.now) {
+        this.waitTwoSecondDogChaseCat();
+      }
+  },
+
+
   update: function () {
     this.checkCollisions();
     this.dogChaseCat();
+    this.timeCheck();
 
 
     //  Set player initial velocity to zero
