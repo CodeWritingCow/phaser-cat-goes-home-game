@@ -14,6 +14,7 @@ BasicGame.Game.prototype = {
         this.load.spritesheet('player', 'assets/cats.png', 32, 32);
         this.load.spritesheet('cat', 'assets/Hiura Flour - cats dogs.png', 32, 32);
         this.load.spritesheet('dog', 'assets/Hiura Flour - cat and dog sprites.png', 32, 32);
+        this.load.spritesheet('cow', 'assets/cow_eat.png', 128, 128);
     },
 
   create: function () { 
@@ -95,6 +96,16 @@ BasicGame.Game.prototype = {
     this.waitTwoSecondDog.body.collideWorldBounds = true;
     this.waitTwoSecondDog.play('idle');
 
+    // Cow eats grass. Moo!
+    this.cow = this.add.sprite(550, 50, 'cow');
+    this.cow.anchor.setTo(0.5, 0.5);
+    this.cow.animations.add('eat', [12, 13, 14, 15], 3, true);
+    this.cow.scale.setTo(1.5);
+    this.physics.enable(this.cow, Phaser.Physics.ARCADE);
+    this.cow.body.collideWorldBounds = true;
+    this.cow.body.immovable = true;
+    this.cow.play('eat');
+
 /*
     this.dog = this.add.sprite(450, 50, 'dog');
     this.dog.anchor.setTo(0.5, 0.5);
@@ -114,6 +125,11 @@ BasicGame.Game.prototype = {
     // When cat and idleDog collide, dog woofs
     this.physics.arcade.collide(this.player, this.idleDog, function() {
         console.log('Woof!');
+    });
+
+    // When cat and cow collide
+    this.physics.arcade.collide(this.player, this.cow, function() {
+        // body...
     });
   },
 
@@ -254,6 +270,8 @@ BasicGame.Game.prototype = {
 
       // Show dog sprite hitbox size
       this.game.debug.body(this.dog);*/
+
+      this.game.debug.body(this.cow);
   },
 
   quitGame: function (pointer) {
