@@ -104,6 +104,9 @@ BasicGame.Game.prototype = {
     this.physics.enable(this.cow, Phaser.Physics.ARCADE);
     this.cow.body.collideWorldBounds = true;
     this.cow.body.immovable = true;
+
+    // Reduce cow hitbox to 70 x 45, recenter by 10 x 2
+    this.cow.body.setSize(70, 45, 10, 2);
     this.cow.play('eat');
 
 /*
