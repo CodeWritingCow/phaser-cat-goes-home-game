@@ -131,6 +131,9 @@ BasicGame.Game.prototype = {
     this.physics.arcade.collide(this.player, this.cow, function() {
         // body...
     });
+
+    // check for collision between runningDog and waitTwoSecondDog. This prevents them from overlapping each other.
+    this.physics.arcade.collide(this.runningDog, this.waitTwoSecondDog);
   },
 
   // Callback when cat and dog collide
