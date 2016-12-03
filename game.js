@@ -108,109 +108,7 @@ BasicGame.Game.prototype = {
     // Reduce cow hitbox to 70 x 45, recenter by 10 x 2
     this.cow.body.setSize(70, 45, 10, 2);
     this.cow.play('eat');
-
-/*
-    this.dog = this.add.sprite(450, 50, 'dog');
-    this.dog.anchor.setTo(0.5, 0.5);
-    this.dog.animations.add('idle', [77, 78, 79, 80], 5, true);
-    this.dog.animations.add('left', [59, 60, 61, 62], 5, true);
-    this.dog.animations.add('right', [71, 72, 73, 74], 10, true);
-    this.dog.animations.add('down', [47, 48, 49, 50], 10, true);
-    this.dog.scale.setTo(1.5);
-    this.dog.play('right');    
-*/
   },
-
-  checkCollisions: function() {
-    this.physics.arcade.overlap(
-      this.player, this.dog, this.dogHit, null, this);
-
-    // When cat and idleDog collide, dog woofs
-    this.physics.arcade.collide(this.player, this.idleDog, function() {
-        console.log('Woof!');
-    });
-
-    // When cat and cow collide
-    this.physics.arcade.collide(this.player, this.cow, function() {
-        // body...
-    });
-
-    // check for collision between runningDog and waitTwoSecondDog. This prevents them from overlapping each other.
-    this.physics.arcade.collide(this.runningDog, this.waitTwoSecondDog);
-  },
-
-  // Callback when cat and dog collide
-  dogHit: function(player, dog) {
-      //dog.destroy();
-      console.log('Collide!');
-  },
-
-  // runningDog chases player
-  dogChaseCat: function() {
-    this.physics.arcade.moveToObject(this.runningDog, this.player, BasicGame.DOG_SPEED);
-
-    if (Math.round(this.runningDog.body.velocity.y) < 0 && Math.round(this.runningDog.body.velocity.x) === 0) {
-        this.runningDog.play('up');
-    }
-
-    if (Math.round(this.runningDog.body.velocity.y) > 0 && Math.round(this.runningDog.body.velocity.x) === 0) {
-        this.runningDog.play('down');
-    }
-
-    if (Math.round(this.runningDog.body.velocity.x) < 0) {
-        this.runningDog.play('left');
-    } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
-        this.runningDog.play('right');
-    }
-/*
-    if (Math.round(this.runningDog.body.velocity.y) < 0) {
-        if (Math.round(this.runningDog.body.velocity.x) < 0) {
-            this.runningDog.play('left');
-        } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
-            this.runningDog.play('right');
-        } else {
-            this.runningDog.play('up');
-        }
-    }
-    if (Math.round(this.runningDog.body.velocity.y) > 0) {
-        if (Math.round(this.runningDog.body.velocity.x) < 0) {
-            this.runningDog.play('left');
-        } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
-            this.runningDog.play('right');
-        } else {
-            this.runningDog.play('down');
-        }
-    }  
-*/
-  },
-
-  // waitTwoSecondDog chases cat after waiting 2 seconds in game
-  waitTwoSecondDogChaseCat: function() {
-    //this.physics.arcade.moveToObject(this.waitTwoSecondDog, this.player, this.rnd.integerInRange(20, 100));
-    this.physics.arcade.moveToObject(this.waitTwoSecondDog, this.player, BasicGame.PLAYER_SPEED);
-
-    if (Math.round(this.waitTwoSecondDog.body.velocity.y) < 0 && Math.round(this.waitTwoSecondDog.body.velocity.x) === 0) {
-        this.waitTwoSecondDog.play('up');
-    }
-
-    if (Math.round(this.waitTwoSecondDog.body.velocity.y) > 0 && Math.round(this.waitTwoSecondDog.body.velocity.x) === 0) {
-        this.waitTwoSecondDog.play('down');
-    }
-
-    if (Math.round(this.waitTwoSecondDog.body.velocity.x) < 0) {
-        this.waitTwoSecondDog.play('left');
-    } else if (Math.round(this.waitTwoSecondDog.body.velocity.x) > 0) {
-        this.waitTwoSecondDog.play('right');
-    }
-  },
-
-  // If 2 seconds pass in game, waitTwoSecondDog starts chasing cat
-  timeCheck: function() {
-      if (BasicGame.DOG_CHASE_DELAY < this.time.now) {
-        this.waitTwoSecondDogChaseCat();
-      }
-  },
-
 
   update: function () {
     this.checkCollisions();
@@ -243,8 +141,9 @@ BasicGame.Game.prototype = {
 
   },
 
+  // Set player control
   playerControl: function() {
-    // Set player control
+
     // Set player initial velocity to zero
     this.player.body.velocity.x = 0;
     this.player.body.velocity.y = 0;
@@ -294,6 +193,76 @@ BasicGame.Game.prototype = {
         }
       } */
     }
+  },
+
+  checkCollisions: function() {
+    this.physics.arcade.overlap(
+      this.player, this.dog, this.dogHit, null, this);
+
+    // When cat and idleDog collide, dog woofs
+    this.physics.arcade.collide(this.player, this.idleDog, function() {
+        console.log('Woof!');
+    });
+
+    // When cat and cow collide
+    this.physics.arcade.collide(this.player, this.cow, function() {
+        // body...
+    });
+
+    // check for collision between runningDog and waitTwoSecondDog. This prevents them from overlapping each other.
+    this.physics.arcade.collide(this.runningDog, this.waitTwoSecondDog);
+  },  
+
+  // Callback when cat and dog collide
+  dogHit: function(player, dog) {
+      //dog.destroy();
+      console.log('Collide!');
+  },
+
+  // runningDog chases player
+  dogChaseCat: function() {
+    this.physics.arcade.moveToObject(this.runningDog, this.player, BasicGame.DOG_SPEED);
+
+    if (Math.round(this.runningDog.body.velocity.y) < 0 && Math.round(this.runningDog.body.velocity.x) === 0) {
+        this.runningDog.play('up');
+    }
+
+    if (Math.round(this.runningDog.body.velocity.y) > 0 && Math.round(this.runningDog.body.velocity.x) === 0) {
+        this.runningDog.play('down');
+    }
+
+    if (Math.round(this.runningDog.body.velocity.x) < 0) {
+        this.runningDog.play('left');
+    } else if (Math.round(this.runningDog.body.velocity.x) > 0) {
+        this.runningDog.play('right');
+    }
+  },
+
+  // waitTwoSecondDog chases cat after waiting 2 seconds in game
+  waitTwoSecondDogChaseCat: function() {
+    //this.physics.arcade.moveToObject(this.waitTwoSecondDog, this.player, this.rnd.integerInRange(20, 100));
+    this.physics.arcade.moveToObject(this.waitTwoSecondDog, this.player, BasicGame.PLAYER_SPEED);
+
+    if (Math.round(this.waitTwoSecondDog.body.velocity.y) < 0 && Math.round(this.waitTwoSecondDog.body.velocity.x) === 0) {
+        this.waitTwoSecondDog.play('up');
+    }
+
+    if (Math.round(this.waitTwoSecondDog.body.velocity.y) > 0 && Math.round(this.waitTwoSecondDog.body.velocity.x) === 0) {
+        this.waitTwoSecondDog.play('down');
+    }
+
+    if (Math.round(this.waitTwoSecondDog.body.velocity.x) < 0) {
+        this.waitTwoSecondDog.play('left');
+    } else if (Math.round(this.waitTwoSecondDog.body.velocity.x) > 0) {
+        this.waitTwoSecondDog.play('right');
+    }
+  },
+
+  // If 2 seconds pass in game, waitTwoSecondDog starts chasing cat
+  timeCheck: function() {
+      if (BasicGame.DOG_CHASE_DELAY < this.time.now) {
+        this.waitTwoSecondDogChaseCat();
+      }
   }
 
 };
