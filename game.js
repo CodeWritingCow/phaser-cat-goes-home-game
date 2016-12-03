@@ -214,11 +214,38 @@ BasicGame.Game.prototype = {
 
   update: function () {
     this.checkCollisions();
+    this.playerControl();
     this.dogChaseCat();
     this.timeCheck();
+  },
 
+  render: function() {
+      // Show player sprite hitbox size
+      this.game.debug.body(this.player);
 
-    //  Set player initial velocity to zero
+      // Show dog sprite hitbox size
+      this.game.debug.body(this.dog);
+      this.game.debug.body(this.idleDog);
+      this.game.debug.body(this.runningDog);
+      this.game.debug.body(this.waitTwoSecondDog);
+
+      // Show cow sprite hitbox
+      this.game.debug.body(this.cow);
+  },
+
+  quitGame: function (pointer) {
+
+    //  Here you should destroy anything you no longer need.
+    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
+
+    //  Then let's go back to the main menu.
+    this.state.start('MainMenu');
+
+  },
+
+  playerControl: function() {
+    // Set player control
+    // Set player initial velocity to zero
     this.player.body.velocity.x = 0;
     this.player.body.velocity.y = 0;
 
@@ -267,27 +294,6 @@ BasicGame.Game.prototype = {
         }
       } */
     }
-
-  },
-
-  render: function() {
-    /*  // Show player sprite hitbox size
-      this.game.debug.body(this.player);
-
-      // Show dog sprite hitbox size
-      this.game.debug.body(this.dog);*/
-
-      this.game.debug.body(this.cow);
-  },
-
-  quitGame: function (pointer) {
-
-    //  Here you should destroy anything you no longer need.
-    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
-
-    //  Then let's go back to the main menu.
-    this.state.start('MainMenu');
-
   }
 
 };
